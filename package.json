@@ -4,13 +4,17 @@
   "description": "## Summary The purpose of this challenge is to understand server fundamentals in vanilla Node.js under the hood - notably the request and response object. We will be learning how to deal with events, streams and constructing the request body. In developing applications, it's most common to use frameworks such as Express to abstract away these details, but it's important to understand their fundamental workings.",
   "main": "server.js",
   "dependencies": {
+    "chalk": "^4.1.1",
     "through2": "^3.0.1"
   },
   "scripts": {
     "start": "node server.js",
-    "streams": "cd streams && node streams.js "
+    "streams": "cd streams && node streams.js ",
+    "dev": "nodemon server.js"
   },
   "author": "",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
   "license": "ISC"
 }
