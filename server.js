@@ -14,9 +14,26 @@ function doOnRequest(request, response) {
     // read the index.html file and send it back to the client
     // code here...
 
-  }
-  else if (request.method === 'POST' && request.url === '/sayHi') {
-    // code here...
+    response.write(fs.readFileSync('./index.html',
+    {encoding:'utf8'}))
+    response.end()
+
+  //  fs.readFile('./index.html', (err, data) => {
+  //    if (err) throw err;
+  //    response.write(data)
+  //  })
+  
+  } else if (request.method === 'GET' && request.url === '/style.css')  {
+    response.setHeader('Content-type', 'text/css');
+    response.write(fs.readFileSync('./style.css'));
+    response.end()
+   
+  } else if (request.method === 'POST' && request.url === '/sayHi') {
+    // code here...{}
+    let message = `Somebody said hi.\n`
+      fs.appendFileSync('hi_log.txt', message)
+      response.end('hi back to you!')
+   
     
   }
   else if (request.method === 'POST' && request.url === '/greeting') {
@@ -29,29 +46,41 @@ function doOnRequest(request, response) {
     });
     request.on('end', () => {
 
-      body = Buffer.concat(body).toString();
-      
+      body = Buffer.concat(body).toString().concat(`\n`);
+      fs.appendFileSync('hi_log.txt', body);
+     
       // if (body === 'hello') {
-      //   console.log('here')
       //   response.end('hello there')
       // } else if (body === `what's up`) {
-      //   console.log('whats up')
       //   response.end('the sky')
       // } else {
-      //   console.log('final')
       //   response.end('good morning')
       // }
-      
-      (body === 'hello') ? response.end('hello there!')
+        (body === 'hello') ? response.end('hello there!')
         : (body === 'whats up') ? response.end('The sky')
         : response.end('good morning')
-    }
+    } )
+  } else if (request.method === 'PUT' && request.url === '/putter') {
+    let body = []
+    request.on('data', (chunk) => {
+      body.push(chunk)
+    });
 
-    )
+    request.on('end', () => {
+      body = Buffer.concat(body).toString().concat(`\n`);
+      
+      fs.writeFileSync('hi_log.txt', body)
+      response.end('updated')
+    })
+  } else if (request.method === 'DELETE' && request.url === '/delete') {
+    fs.unlink('hi_log.txt', err => {
+      if (err) throw err;
+      console.log('file was deleted')
+    })
+    response.end();
   }
   else {
-    // Handle 404 error: page not found
-    // code here...
-    
+    response.statusCode = 404;
+    response.end('Error: Not Found')
   }
 }
