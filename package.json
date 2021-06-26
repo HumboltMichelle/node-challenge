@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "chalk": "^4.1.1",
+    "node-fetch": "^2.6.1",
     "through2": "^3.0.1"
   },
   "scripts": {

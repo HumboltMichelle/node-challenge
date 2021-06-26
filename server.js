@@ -1,5 +1,6 @@
 const http = require('http');
 const fs = require('fs');
+const fetch = require('node-fetch');
 const server = http.createServer(doOnRequest);
 server.listen(3000);
 
@@ -10,6 +11,19 @@ function doOnRequest(request, response) {
   // Send back a message saying "Welcome to Twitter"
   // code here...
   //response.end("yo")  
+  if (request.method === 'GET' && request.url === '/pokemon'){
+    let result = []
+    fetch('https://pokeapi.co/api/v2/pokemon/bulbasaur')
+      .then(res => {return res.json()})
+      .then(json => { return json.abilities})
+      .then(final => response.write(final))
+      .catch(err => console.log('pokecall:', err))
+
+
+
+  }
+
+
   if (request.method === 'GET' && request.url === '/') {
     // read the index.html file and send it back to the client
     // code here...
